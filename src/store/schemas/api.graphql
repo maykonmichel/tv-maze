@@ -6,13 +6,17 @@ type Episode {
   id: ID!
   name: String!
   number: Int!
+  season: Int!
+  summary: String!
+  image: Image
 }
 
 type Image {
-  medium: String!
+  medium: String
 }
 
 type Query {
+  episode(id: ID!): Episode!
   episodes(show: ID!): [Episode]!
   show(id: ID!): Show!
   shows(page: Int!): [Show]!

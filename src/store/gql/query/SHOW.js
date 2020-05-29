@@ -17,6 +17,11 @@ export default gql`
       id
       name
       number
+      season
+      summary
+      image @type(name: "Image") {
+        medium
+      }
     }
   }
 `;
