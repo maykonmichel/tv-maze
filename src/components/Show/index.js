@@ -7,14 +7,14 @@ import TouchableView from '../TouchableView';
 
 import styles from './styles';
 
-const Show = ({id, image: {medium: uri}, name, rating: {average}}) => {
+const Show = ({id, image, name, rating: {average}}) => {
   const {navigate} = useNavigation();
 
   const onPress = useCallback(() => navigate('show', {id}), [id, navigate]);
 
   return (
     <TouchableView onPress={onPress} style={styles.container}>
-      <Image source={{uri}} style={styles.image} />
+      <Image source={{uri: image?.medium}} style={styles.image} />
       <Text>{name}</Text>
       <Text>{average || '-'}</Text>
     </TouchableView>
