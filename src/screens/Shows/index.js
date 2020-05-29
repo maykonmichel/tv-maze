@@ -8,7 +8,7 @@ import SHOWS from '../../store/gql/query/SHOWS';
 
 const keyExtractor = ({id}) => id.toString();
 
-const Series = () => {
+const Shows = () => {
   const {data: {shows = []} = {}} = useQuery(SHOWS, {variables: {page: 1}});
 
   const renderItem = useCallback(({item}) => <Show {...item} />, []);
@@ -26,4 +26,4 @@ const Series = () => {
   );
 };
 
-export default memo(Series);
+export default memo(Shows);
