@@ -2,21 +2,37 @@ schema {
   query: Query
 }
 
+type Episode {
+  id: ID!
+  name: String!
+  number: Int!
+}
+
 type Image {
   medium: String!
 }
 
 type Query {
-  shows(page: Int!): [Show]
+  episodes(show: ID!): [Episode]!
+  show(id: ID!): Show!
+  shows(page: Int!): [Show]!
 }
 
 type Rating {
   average: Int
 }
 
+type Schedule {
+  time: String!
+  days: [String]!
+}
+
 type Show {
   id: ID!
   name: String!
   image: Image!
-  rating: Rating
+  rating: Rating!
+  schedule: Schedule!
+  genres: [String]!
+  sumary: String
 }
