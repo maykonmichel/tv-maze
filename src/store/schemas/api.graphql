@@ -1,0 +1,22 @@
+schema {
+  query: Query
+}
+
+type Image {
+  medium: String!
+}
+
+type Query {
+  shows(page: Int!): [Show]
+}
+
+type Rating {
+  average: Int
+}
+
+type Show {
+  id: ID!
+  name: String!
+  image: Image!
+  rating: Rating
+}
