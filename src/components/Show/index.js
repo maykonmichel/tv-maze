@@ -1,26 +1,35 @@
-import React, {memo} from 'react';
-import {Image, Text, View} from 'react-native';
+import React, {memo, useCallback} from 'react';
+import {Image, Text} from 'react-native';
 import PropTypes from 'prop-types';
+import {useNavigation} from '@react-navigation/native';
+
+import TouchableView from '../TouchableView';
 
 import styles from './styles';
 
-const Show = ({name, image: {medium: uri}, rating: {average}}) => {
+const Show = ({id, image: {medium: uri}, name, rating: {average}}) => {
+  const {navigate} = useNavigation();
+
+  const onPress = useCallback(() => navigate('show', {id}), [id, navigate]);
+
   return (
-    <View style={styles.container}>
+    <TouchableView onPress={onPress} style={styles.container}>
       <Image source={{uri}} style={styles.image} />
       <Text>{name}</Text>
       <Text>{average || '-'}</Text>
-    </View>
+    </TouchableView>
   );
 };
 
 Show.propTypes = {
+  id: PropTypes.number,
   name: PropTypes.string,
   image: PropTypes.shape({medium: PropTypes.string}),
   rating: PropTypes.shape({average: PropTypes.number}),
 };
 
 Show.defaultProps = {
+  id: -1,
   name: '',
   image: {medium: ''},
   rating: {average: null},
