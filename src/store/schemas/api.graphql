@@ -18,12 +18,17 @@ type Image {
 type Query {
   episode(id: ID!): Episode!
   episodes(show: ID!): [Episode]!
+  search(q: String): [Search]!
   show(id: ID!): Show!
   shows(page: Int!): [Show]!
 }
 
 type Rating {
   average: Int
+}
+
+type Search {
+  show: Show
 }
 
 type Schedule {
