@@ -10,10 +10,12 @@ import TouchableView from '../TouchableView';
 
 import styles from './styles';
 
-const Show = ({id, image, name, rating: {average}}) => {
+const Show = ({favorite, id, image, name, rating: {average}}) => {
   const {navigate} = useNavigation();
 
   const onPress = useCallback(() => navigate('show', {id}), [id, navigate]);
+
+  const onToggleFavorite = useCallback(() => {}, []);
 
   return (
     <View style={styles.container}>
@@ -29,26 +31,39 @@ const Show = ({id, image, name, rating: {average}}) => {
           }
           style={styles.image}
         />
+      </TouchableView>
+      <View style={styles.footer}>
+        <View style={styles.favorite}>
+          <TouchableView onPress={onToggleFavorite} borderless>
+            <Icon
+              name={favorite ? 'heart' : 'heart-outline'}
+              color="#fff"
+              size={22}
+            />
+          </TouchableView>
+        </View>
         <Text style={styles.average}>
           <Icon name="star" color="#fdd835" size={14} />
           {average || '-'}
         </Text>
-      </TouchableView>
+      </View>
     </View>
   );
 };
 
 Show.propTypes = {
+  favorite: PropTypes.bool,
   id: PropTypes.number,
-  name: PropTypes.string,
   image: PropTypes.shape({medium: PropTypes.string}),
+  name: PropTypes.string,
   rating: PropTypes.shape({average: PropTypes.number}),
 };
 
 Show.defaultProps = {
+  favorite: false,
   id: -1,
-  name: '',
   image: {medium: ''},
+  name: '',
   rating: {average: null},
 };
 
