@@ -13,6 +13,11 @@ const SEARCH = gql`
           average
         }
         summary
+        genres
+        schedule {
+          time
+          days
+        }
       }
     }
   }
@@ -30,6 +35,11 @@ const SHOWS = gql`
         average
       }
       summary
+      genres
+      schedule {
+        time
+        days
+      }
     }
   }
 `;
