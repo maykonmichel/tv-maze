@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">tvMaze</string>
+    <string name="splashscreen">Splashscreen</string>
 </resources>
