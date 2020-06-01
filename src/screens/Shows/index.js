@@ -6,16 +6,23 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {ActivityIndicator, FlatList, TextInput} from 'react-native';
+import {ActivityIndicator, FlatList, TextInput, View} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import empty from '../../assets/lottie/629-empty-box.json';
 
 import Show from '../../components/Show';
 
 import SHOWS from '../../store/gql/query/SHOWS';
+import TouchableView from '../../components/TouchableView';
+import colors from '../../theme/colors';
+
+import FAVORITES from '../../store/gql/query/FAVORITES';
+
+import styles from './styles';
 
 const keyExtractor = ({id}) => id.toString();
 
@@ -24,15 +31,29 @@ const Shows = () => {
 
   const list = useRef();
 
+  const [favorite, setFavorite] = useState(false);
   const [q, setQ] = useState('');
 
   const {data: {shows = []} = {}, fetchMore, loading} = useQuery(SHOWS, {
     variables: {page: 0, q},
   });
 
+  const {data: {favorites = []} = {}} = useQuery(FAVORITES);
+
+  const data = useMemo(
+    () =>
+      favorite
+        ? favorites.filter((show) =>
+            show.name.toUpperCase().includes(q.toUpperCase()),
+          )
+        : shows,
+    [favorite, favorites, q, shows],
+  );
+
   const loadMore = useCallback(
     () =>
       !q &&
+      !favorite &&
       fetchMore({
         variables: {
           page: Math.floor(shows.length / 250) + 1,
@@ -47,20 +68,25 @@ const Shows = () => {
           };
         },
       }),
-    [fetchMore, q, shows.length],
+    [favorite, fetchMore, q, shows.length],
   );
 
   const ListEmptyComponent = useMemo(
     () =>
       !loading && (
-        <LottieView source={empty} style={{width: '100%'}} autoPlay loop />
+        <LottieView source={empty} style={styles.empty} autoPlay loop />
       ),
     [loading],
   );
 
   const ListFooterComponent = useMemo(
-    () => (!q || loading) && <ActivityIndicator size="large" />,
-    [loading, q],
+    () => (!q || loading) && !favorite && <ActivityIndicator size="large" />,
+    [favorite, loading, q],
+  );
+
+  const onToggleFavorite = useCallback(
+    () => setFavorite((value) => !value),
+    [],
   );
 
   const renderItem = useCallback(({item}) => <Show {...item} />, []);
@@ -68,10 +94,25 @@ const Shows = () => {
   useEffect(() => {
     setOptions({
       headerTitle: () => (
-        <TextInput onChangeText={setQ} placeholder="Search shows" />
+        <View style={styles.headerContainer}>
+          <TextInput
+            onChangeText={setQ}
+            placeholder="Search shows"
+            style={styles.searchBar}
+          />
+          <View style={styles.favorite}>
+            <TouchableView onPress={onToggleFavorite} borderless>
+              <Icon
+                name={favorite ? 'heart' : 'heart-outline'}
+                color={colors.primary.main}
+                size={28}
+              />
+            </TouchableView>
+          </View>
+        </View>
       ),
     });
-  }, [setOptions]);
+  }, [favorite, onToggleFavorite, setOptions]);
 
   useEffect(() => {
     list.current.scrollToOffset({offset: 0});
@@ -80,8 +121,8 @@ const Shows = () => {
   return (
     <FlatList
       ref={list}
-      data={shows}
-      extraData={shows}
+      data={data}
+      extraData={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       numColumns={2}
