@@ -7,10 +7,14 @@ import TouchableView from '../TouchableView';
 
 import styles from './styles';
 
-const Episode = ({id, name, number}) => {
+const Episode = ({id, name, number, show}) => {
   const {navigate} = useNavigation();
 
-  const onPress = useCallback(() => navigate('episode', {id}), [id, navigate]);
+  const onPress = useCallback(() => navigate('episode', {id, show}), [
+    id,
+    navigate,
+    show,
+  ]);
 
   return (
     <TouchableView onPress={onPress} style={styles.container}>
@@ -24,12 +28,14 @@ Episode.propTypes = {
   id: PropTypes.number,
   name: PropTypes.string,
   number: PropTypes.number,
+  show: PropTypes.string,
 };
 
 Episode.defaultProps = {
   id: -1,
   name: '',
   number: 0,
+  show: '',
 };
 
 export default memo(Episode);
