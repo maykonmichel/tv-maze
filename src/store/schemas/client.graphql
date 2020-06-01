@@ -10,5 +10,5 @@ extend type Mutation {
 }
 
 extend type Query {
-  favorites: [String]
+  favorites: [Show]
 }

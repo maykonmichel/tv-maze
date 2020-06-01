@@ -15,8 +15,8 @@ export default async (parent, {id}, {cache, client}) => {
     query,
     data: {
       favorites: favorite
-        ? favorites.filter((show) => show !== id)
-        : [...favorites, id],
+        ? favorites.filter((show) => show.id !== id)
+        : [...favorites, {__typename: 'Show', id}],
     },
   });
 

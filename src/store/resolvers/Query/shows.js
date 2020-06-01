@@ -58,7 +58,7 @@ export default async (parent, args, {client}) => {
   const addFavoriteField = ({id, ...show}) => ({
     id,
     ...show,
-    favorite: favorites.includes(id),
+    favorite: favorites.some((favorite) => favorite.id === id),
   });
 
   return shows
