@@ -48,5 +48,11 @@ export default async (parent, args, {client}) => {
   const {
     data: {search, shows},
   } = await client.query({query: args.q ? SEARCH : SHOWS, variables: args});
-  return shows || search.map(({show}) => show);
+
+  const addFavoriteField = (show) => ({
+    ...show,
+    favorite: false,
+  });
+
+  return shows.map(addFavoriteField) || search.map(({show}) => show);
 };

@@ -17,6 +17,7 @@ export default gql`
         time
         days
       }
+      favorite
     }
   }
 `;

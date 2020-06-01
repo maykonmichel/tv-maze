@@ -1,2 +1,6 @@
 directive @client on FIELD
 directive @type(name: String!) on FIELD
+
+extend type Show {
+  favorite: Boolean
+}
