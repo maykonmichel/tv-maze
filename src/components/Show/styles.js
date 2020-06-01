@@ -4,8 +4,9 @@ import colors from '../../theme/colors';
 
 export default StyleSheet.create({
   average: {
-    backgroundColor: colors.primary.light,
+    flex: 1,
     color: '#fdd835',
+    fontSize: 14,
     textAlign: 'center',
     textTransform: 'uppercase',
   },
@@ -13,6 +14,18 @@ export default StyleSheet.create({
     flex: 1 / 2,
     alignItems: 'center',
     marginVertical: 10,
+  },
+  favorite: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.primary.light,
+    height: 40,
+    width: 180,
   },
   header: {
     backgroundColor: colors.primary.main,
@@ -29,7 +42,6 @@ export default StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     textTransform: 'uppercase',
-    fontSize: 12,
     fontWeight: 'bold',
   },
 });
