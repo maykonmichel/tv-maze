@@ -1,4 +1,11 @@
-import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {ActivityIndicator, FlatList, TextInput} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
@@ -14,6 +21,8 @@ const keyExtractor = ({id}) => id.toString();
 
 const Shows = () => {
   const {setOptions} = useNavigation();
+
+  const list = useRef();
 
   const [q, setQ] = useState('');
 
@@ -64,8 +73,13 @@ const Shows = () => {
     });
   }, [setOptions]);
 
+  useEffect(() => {
+    list.current.scrollToOffset({offset: 0});
+  }, [q]);
+
   return (
     <FlatList
+      ref={list}
       data={shows}
       extraData={shows}
       renderItem={renderItem}
