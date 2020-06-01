@@ -2,8 +2,10 @@ import React, {memo, useCallback, useEffect, useMemo} from 'react';
 import {Image, SectionList, Text, View} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 
 import noImgPortraitText from '../../assets/images/no-img-portrait-text.png';
+import movieLoading from '../../assets/lottie/1961-movie-loading.json';
 import Episode from '../../components/Episode';
 import SHOW from '../../store/gql/query/SHOW';
 
@@ -19,6 +21,7 @@ const Show = () => {
 
   const {
     data: {episodes = [], seasons = [], show: {name, image, summary} = {}} = {},
+    loading,
   } = useQuery(SHOW, {
     variables: {id},
   });
@@ -46,9 +49,11 @@ const Show = () => {
 
   useEffect(() => {
     setOptions({
-      headerTitle: name,
+      headerTitle: name || 'Loading show...',
     });
   }, [name, setOptions]);
+
+  if (loading) return <LottieView source={movieLoading} autoPlay loop />;
 
   return (
     <>
