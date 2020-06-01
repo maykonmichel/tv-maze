@@ -1,8 +1,10 @@
 import {StyleSheet} from 'react-native';
 
+import colors from '../../theme/colors';
+
 export default StyleSheet.create({
   average: {
-    backgroundColor: '#534bae',
+    backgroundColor: colors.primary.light,
     color: '#fdd835',
     textAlign: 'center',
     textTransform: 'uppercase',
@@ -13,7 +15,7 @@ export default StyleSheet.create({
     marginVertical: 10,
   },
   header: {
-    backgroundColor: '#000051',
+    backgroundColor: colors.primary.dark,
     height: 40,
     justifyContent: 'center',
   },
