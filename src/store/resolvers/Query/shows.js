@@ -1,5 +1,7 @@
 import gql from 'graphql-tag';
 
+import FAVORITES from '../../gql/query/FAVORITES';
+
 const SEARCH = gql`
   query($q: String) {
     search(q: $q) @rest(type: "Search", path: "/search/shows?{args}") {
@@ -49,9 +51,14 @@ export default async (parent, args, {client}) => {
     data: {search, shows},
   } = await client.query({query: args.q ? SEARCH : SHOWS, variables: args});
 
-  const addFavoriteField = (show) => ({
+  const {
+    data: {favorites},
+  } = await client.query({query: FAVORITES});
+
+  const addFavoriteField = ({id, ...show}) => ({
+    id,
     ...show,
-    favorite: false,
+    favorite: favorites.includes(id),
   });
 
   return shows
