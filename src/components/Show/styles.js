@@ -15,7 +15,7 @@ export default StyleSheet.create({
     marginVertical: 10,
   },
   header: {
-    backgroundColor: colors.primary.dark,
+    backgroundColor: colors.primary.main,
     height: 40,
     justifyContent: 'center',
   },
