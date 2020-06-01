@@ -1,7 +1,10 @@
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
-import {Button, FlatList, TextInput} from 'react-native';
+import {ActivityIndicator, FlatList, TextInput} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
+
+import empty from '../../assets/lottie/629-empty-box.json';
 
 import Show from '../../components/Show';
 
@@ -14,12 +17,13 @@ const Shows = () => {
 
   const [q, setQ] = useState('');
 
-  const {data: {shows = []} = {}, fetchMore} = useQuery(SHOWS, {
+  const {data: {shows = []} = {}, fetchMore, loading} = useQuery(SHOWS, {
     variables: {page: 0, q},
   });
 
   const loadMore = useCallback(
     () =>
+      !q &&
       fetchMore({
         variables: {
           page: Math.floor(shows.length / 250) + 1,
@@ -34,12 +38,21 @@ const Shows = () => {
           };
         },
       }),
-    [fetchMore, shows.length],
+    [fetchMore, q, shows.length],
   );
 
-  const ListFooterComponent = useMemo(() => {
-    return !q && <Button title="Load more" onPress={loadMore} />;
-  }, [loadMore, q]);
+  const ListEmptyComponent = useMemo(
+    () =>
+      !loading && (
+        <LottieView source={empty} style={{width: '100%'}} autoPlay loop />
+      ),
+    [loading],
+  );
+
+  const ListFooterComponent = useMemo(
+    () => (!q || loading) && <ActivityIndicator size="large" />,
+    [loading, q],
+  );
 
   const renderItem = useCallback(({item}) => <Show {...item} />, []);
 
@@ -58,6 +71,9 @@ const Shows = () => {
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       numColumns={2}
+      onEndReached={loadMore}
+      onEndReachedThreshold={0.1}
+      ListEmptyComponent={ListEmptyComponent}
       ListFooterComponent={ListFooterComponent}
     />
   );
