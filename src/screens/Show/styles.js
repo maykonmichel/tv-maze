@@ -8,6 +8,10 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
+  data: {
+    flex: 1 / 2,
+    marginRight: 5,
+  },
   header: {
     backgroundColor: colors.primary.main,
     color: '#fff',
@@ -23,8 +27,10 @@ export default StyleSheet.create({
   imageContainer: {
     flex: 1 / 2,
   },
-  summary: {
-    flex: 1 / 2,
-    marginRight: 5,
+  indicatorStyle: {
+    backgroundColor: colors.primary.light,
+  },
+  materialTopTabNavigator: {
+    backgroundColor: colors.secondary.dark,
   },
 });

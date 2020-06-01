@@ -1,8 +1,16 @@
 import React, {memo, useCallback, useEffect, useMemo} from 'react';
-import {Image, SectionList, Text, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  SectionList,
+  Text,
+  View,
+} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import noImgPortraitText from '../../assets/images/no-img-portrait-text.png';
 import movieLoading from '../../assets/lottie/1961-movie-loading.json';
@@ -11,7 +19,10 @@ import SHOW from '../../store/gql/query/SHOW';
 
 import styles from './styles';
 
+const {Navigator, Screen} = createMaterialTopTabNavigator();
+
 const keyExtractor = ({id}) => id.toString();
+const genreKeyExtractor = (item) => item;
 
 const Show = () => {
   const {setOptions} = useNavigation();
@@ -20,11 +31,26 @@ const Show = () => {
   } = useRoute();
 
   const {
-    data: {episodes = [], seasons = [], show: {name, image, summary} = {}} = {},
+    data: {
+      episodes = [],
+      seasons = [],
+      show: {
+        name,
+        image,
+        summary,
+        genres,
+        schedule: {time, days = []} = {},
+      } = {},
+    } = {},
     loading,
   } = useQuery(SHOW, {
     variables: {id},
   });
+
+  const schedule = useMemo(() => time && `${days.join(', ')} at ${time}`, [
+    days,
+    time,
+  ]);
 
   const sections = useMemo(
     () =>
@@ -34,6 +60,8 @@ const Show = () => {
       })),
     [episodes, seasons],
   );
+
+  const renderGenre = useCallback(({item}) => <Text>{item}</Text>, []);
 
   const renderItem = useCallback(
     ({item}) => <Episode show={name} {...item} />,
@@ -68,17 +96,43 @@ const Show = () => {
             style={styles.image}
           />
         </View>
-        <Text style={styles.summary}>{summary}</Text>
+        <View style={styles.data}>
+          <FlatList
+            data={genres}
+            extraData={genres}
+            renderItem={renderGenre}
+            keyExtractor={genreKeyExtractor}
+          />
+          <Text>{schedule}</Text>
+        </View>
       </View>
-      <SectionList
-        sections={sections}
-        data={episodes}
-        extraData={episodes}
-        renderItem={renderItem}
-        renderSectionHeader={renderSectionHeader}
-        keyExtractor={keyExtractor}
-        stickySectionHeadersEnabled
-      />
+      <Navigator
+        tabBarOptions={{
+          activeTintColor: '#fff',
+          indicatorStyle: styles.indicatorStyle,
+          style: styles.materialTopTabNavigator,
+        }}>
+        <Screen name="summary" options={{tabBarLabel: 'Summary'}}>
+          {() => (
+            <ScrollView>
+              <Text>{summary}</Text>
+            </ScrollView>
+          )}
+        </Screen>
+        <Screen name="seasons" options={{tabBarLabel: 'Seasons'}}>
+          {() => (
+            <SectionList
+              sections={sections}
+              data={episodes}
+              extraData={episodes}
+              renderItem={renderItem}
+              renderSectionHeader={renderSectionHeader}
+              keyExtractor={keyExtractor}
+              stickySectionHeadersEnabled
+            />
+          )}
+        </Screen>
+      </Navigator>
     </>
   );
 };
