@@ -3,6 +3,7 @@ import {Image, SectionList, Text, View} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import noImgPortraitText from '../../assets/images/no-img-portrait-text.png';
 import Episode from '../../components/Episode';
 import SHOW from '../../store/gql/query/SHOW';
 
@@ -17,11 +18,7 @@ const Show = () => {
   } = useRoute();
 
   const {
-    data: {
-      episodes = [],
-      seasons = [],
-      show: {name, image: {medium: uri} = {}, summary} = {},
-    } = {},
+    data: {episodes = [], seasons = [], show: {name, image, summary} = {}} = {},
   } = useQuery(SHOW, {
     variables: {id},
   });
@@ -35,7 +32,10 @@ const Show = () => {
     [episodes, seasons],
   );
 
-  const renderItem = useCallback(({item}) => <Episode {...item} />, []);
+  const renderItem = useCallback(
+    ({item}) => <Episode show={name} {...item} />,
+    [name],
+  );
 
   const renderSectionHeader = useCallback(
     ({section: {number}}) => (
@@ -54,7 +54,10 @@ const Show = () => {
     <>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image source={{uri}} style={styles.image} />
+          <Image
+            source={image ? {uri: image.medium} : noImgPortraitText}
+            style={styles.image}
+          />
         </View>
         <Text style={styles.summary}>{summary}</Text>
       </View>
