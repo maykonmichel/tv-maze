@@ -23,7 +23,11 @@ const Episode = () => {
     <View style={styles.container}>
       <View>
         <Image
-          source={image ? {uri: image.medium} : noImgLandscapeText}
+          source={
+            image
+              ? {uri: image.medium.replace('http', 'https')}
+              : noImgLandscapeText
+          }
           style={styles.image}
         />
         <Text style={styles.name}>{name}</Text>
