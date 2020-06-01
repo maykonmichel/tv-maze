@@ -33,6 +33,8 @@ npx react-native run-android
 - After clicking on a series, the application should show the details of the series, showing the following information:
     - Name
     - Poster
+    - Days and time during which the series airs
+    - Genres
     - Summary
     - List of episodes separated by season
 - After clicking on an episode, the application should show the episode’s information, including:
