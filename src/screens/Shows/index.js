@@ -1,12 +1,14 @@
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator, FlatList, TextInput, View} from 'react-native';
+import {ActivityIndicator, FlatList, TextInput} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
+
+import empty from '../../assets/lottie/629-empty-box.json';
 
 import Show from '../../components/Show';
 
 import SHOWS from '../../store/gql/query/SHOWS';
-import SEARCH from '../../store/gql/query/SEARCH';
 
 const keyExtractor = ({id}) => id.toString();
 
@@ -16,15 +18,10 @@ const Shows = () => {
   const [q, setQ] = useState('');
 
   const {data: {shows = []} = {}, fetchMore, loading} = useQuery(SHOWS, {
-    variables: {page: 0},
+    variables: {page: 0, q},
   });
 
-  const ListFooterComponent = useMemo(() => {
-    if (!loading) return null;
-    return <ActivityIndicator />;
-  }, [loading]);
-
-  const onEndReached = useCallback(
+  const loadMore = useCallback(
     () =>
       !q &&
       fetchMore({
@@ -35,50 +32,50 @@ const Shows = () => {
           if (!fetchMoreResult) {
             return prev;
           }
-          return {...prev, shows: [...prev.shows, ...fetchMoreResult.shows]};
+          return {
+            ...prev,
+            shows: [...prev.shows, ...fetchMoreResult.shows],
+          };
         },
       }),
     [fetchMore, q, shows.length],
+  );
+
+  const ListEmptyComponent = useMemo(
+    () =>
+      !loading && (
+        <LottieView source={empty} style={{width: '100%'}} autoPlay loop />
+      ),
+    [loading],
+  );
+
+  const ListFooterComponent = useMemo(
+    () => (!q || loading) && <ActivityIndicator size="large" />,
+    [loading, q],
   );
 
   const renderItem = useCallback(({item}) => <Show {...item} />, []);
 
   useEffect(() => {
     setOptions({
-      headerTitle: () => <TextInput onChangeText={setQ} />,
+      headerTitle: () => (
+        <TextInput onChangeText={setQ} placeholder="Search shows" />
+      ),
     });
   }, [setOptions]);
 
-  useEffect(() => {
-    const timout = setTimeout(
-      () =>
-        fetchMore({
-          query: q ? SEARCH : SHOWS,
-          variables: q ? {q} : {page: 0},
-          updateQuery: (prev, {fetchMoreResult}) => ({
-            shows:
-              fetchMoreResult.shows ||
-              fetchMoreResult.search.map(({show}) => show),
-          }),
-        }),
-      500,
-    );
-    return () => clearTimeout(timout);
-  }, [fetchMore, q]);
-
   return (
-    <View>
-      <FlatList
-        data={shows}
-        extraData={shows}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        numColumns={2}
-        onEndReached={onEndReached}
-        onEndReachedThreshold={0.1}
-        ListFooterComponent={ListFooterComponent}
-      />
-    </View>
+    <FlatList
+      data={shows}
+      extraData={shows}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+      numColumns={2}
+      onEndReached={loadMore}
+      onEndReachedThreshold={0.1}
+      ListEmptyComponent={ListEmptyComponent}
+      ListFooterComponent={ListFooterComponent}
+    />
   );
 };
 

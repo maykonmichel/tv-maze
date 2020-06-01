@@ -1,7 +1,10 @@
 import React, {memo, useCallback} from 'react';
-import {Image, Text} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import noImgPortraitText from '../../assets/images/no-img-portrait-text.png';
 
 import TouchableView from '../TouchableView';
 
@@ -13,11 +16,25 @@ const Show = ({id, image, name, rating: {average}}) => {
   const onPress = useCallback(() => navigate('show', {id}), [id, navigate]);
 
   return (
-    <TouchableView onPress={onPress} style={styles.container}>
-      <Image source={{uri: image?.medium}} style={styles.image} />
-      <Text>{name}</Text>
-      <Text>{average || '-'}</Text>
-    </TouchableView>
+    <View style={styles.container}>
+      <TouchableView onPress={onPress}>
+        <View style={styles.header}>
+          <Text style={styles.name}>{name}</Text>
+        </View>
+        <Image
+          source={
+            image
+              ? {uri: image.medium.replace('http', 'https')}
+              : noImgPortraitText
+          }
+          style={styles.image}
+        />
+        <Text style={styles.average}>
+          <Icon name="star" color="#fdd835" size={14} />
+          {average || '-'}
+        </Text>
+      </TouchableView>
+    </View>
   );
 };
 
