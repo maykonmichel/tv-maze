@@ -1,5 +1,5 @@
 import fragment from '../../gql/fragment/FAVORITE';
-import query from '../../gql/query/FAVORITES';
+import query from '../../gql/query/FAVORITES_IDS';
 
 export default async (parent, {id}, {cache, client}) => {
   const {favorite} = cache.readFragment({
