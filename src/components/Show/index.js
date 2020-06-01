@@ -3,8 +3,10 @@ import {Image, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useMutation} from '@apollo/client';
 
 import noImgPortraitText from '../../assets/images/no-img-portrait-text.png';
+import TOGGLE_FAVORITE from '../../store/gql/mutation/TOGGLE_FAVORITE';
 
 import TouchableView from '../TouchableView';
 
@@ -13,9 +15,14 @@ import styles from './styles';
 const Show = ({favorite, id, image, name, rating: {average}}) => {
   const {navigate} = useNavigation();
 
+  const [toggleFavorite] = useMutation(TOGGLE_FAVORITE);
+
   const onPress = useCallback(() => navigate('show', {id}), [id, navigate]);
 
-  const onToggleFavorite = useCallback(() => {}, []);
+  const onToggleFavorite = useCallback(
+    () => toggleFavorite({variables: {id}}),
+    [id, toggleFavorite],
+  );
 
   return (
     <View style={styles.container}>
