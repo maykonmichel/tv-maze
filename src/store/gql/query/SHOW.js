@@ -13,6 +13,11 @@ export default gql`
       }
       summary
     }
+    seasons(show: $id)
+      @rest(type: "Season", path: "/shows/{args.show}/seasons") {
+      id
+      number
+    }
     episodes(show: $id)
       @rest(type: "Episode", path: "/shows/{args.show}/episodes") {
       id

@@ -19,6 +19,7 @@ type Query {
   episode(id: ID!): Episode!
   episodes(show: ID!): [Episode]!
   search(q: String): [Search]!
+  seasons(show: ID!): [Season]!
   show(id: ID!): Show!
   shows(page: Int, q: String): [Show]!
 }
@@ -29,6 +30,11 @@ type Rating {
 
 type Search {
   show: Show
+}
+
+type Season {
+  id: ID
+  number: Int
 }
 
 type Schedule {
