@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export default gql`
-  query($page: Int!) {
-    shows(page: $page) @rest(type: "Show", path: "/shows?{args}") {
+  query($page: Int, $q: String) {
+    shows(page: $page, q: $q) @client {
       id
       name
       image @type(name: "Image") {
