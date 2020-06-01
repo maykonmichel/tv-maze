@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 
 const SEARCH = gql`
   query($q: String) {
-    search(q: $q) @rest(type: "Show", path: "/search/shows?{args}") {
-      show {
+    search(q: $q) @rest(type: "Search", path: "/search/shows?{args}") {
+      show @type(name: "Show") {
         id
         name
         image @type(name: "Image") {
