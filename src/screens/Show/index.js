@@ -1,16 +1,10 @@
 import React, {memo, useCallback, useEffect, useMemo} from 'react';
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  SectionList,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, Image, SectionList, Text, View} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {WebView} from 'react-native-webview';
 
 import noImgPortraitText from '../../assets/images/no-img-portrait-text.png';
 import movieLoading from '../../assets/lottie/1961-movie-loading.json';
@@ -37,7 +31,7 @@ const Show = () => {
       show: {
         name,
         image,
-        summary,
+        summary: html,
         genres,
         schedule: {time, days = []} = {},
       } = {},
@@ -113,13 +107,9 @@ const Show = () => {
           style: styles.materialTopTabNavigator,
         }}>
         <Screen name="summary" options={{tabBarLabel: 'Summary'}}>
-          {() => (
-            <ScrollView>
-              <Text>{summary}</Text>
-            </ScrollView>
-          )}
+          {() => <WebView source={{html}} scalesPageToFit={false} />}
         </Screen>
-        <Screen name="seasons" options={{tabBarLabel: 'Seasons'}}>
+        <Screen name="episodes" options={{tabBarLabel: 'Episodes'}}>
           {() => (
             <SectionList
               sections={sections}
