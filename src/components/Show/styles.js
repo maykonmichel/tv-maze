@@ -16,7 +16,9 @@ export default StyleSheet.create({
   },
   header: {
     backgroundColor: colors.primary.main,
-    height: 40,
+    height: 50,
+    width: 180,
+    paddingHorizontal: 5,
     justifyContent: 'center',
   },
   image: {
@@ -27,5 +29,7 @@ export default StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     textTransform: 'uppercase',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });

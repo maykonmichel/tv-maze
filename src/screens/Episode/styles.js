@@ -25,8 +25,4 @@ export default StyleSheet.create({
     backgroundColor: colors.primary.main,
     lineHeight: 40,
   },
-  summary: {
-    padding: 20,
-    fontSize: 16,
-  },
 });

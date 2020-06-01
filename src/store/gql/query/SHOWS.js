@@ -12,6 +12,11 @@ export default gql`
         average
       }
       summary
+      genres
+      schedule {
+        time
+        days
+      }
     }
   }
 `;

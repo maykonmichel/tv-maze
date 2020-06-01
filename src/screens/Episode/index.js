@@ -2,6 +2,7 @@ import React, {memo} from 'react';
 import {Image, Text, View} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useRoute} from '@react-navigation/native';
+import {WebView} from 'react-native-webview';
 
 import EPISODE from '../../store/gql/query/EPISODE';
 
@@ -14,7 +15,7 @@ const Episode = () => {
   } = useRoute();
 
   const {
-    data: {episode: {name, number, season, summary, image} = {}} = {},
+    data: {episode: {name, number, season, summary: html, image} = {}} = {},
   } = useQuery(EPISODE, {
     variables: {id},
   });
@@ -31,8 +32,8 @@ const Episode = () => {
           style={styles.image}
         />
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.summary}>{summary}</Text>
       </View>
+      <WebView source={{html}} scalesPageToFit={false} />
       <Text style={styles.data}>
         {`${show}: Season ${season} - Episode ${number}`}
       </Text>
