@@ -12,6 +12,11 @@ export default gql`
         average
       }
       summary
+      genres
+      schedule {
+        time
+        days
+      }
     }
     seasons(show: $id)
       @rest(type: "Season", path: "/shows/{args.show}/seasons") {
