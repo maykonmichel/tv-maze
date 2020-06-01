@@ -22,7 +22,11 @@ const Show = ({id, image, name, rating: {average}}) => {
           <Text style={styles.name}>{name}</Text>
         </View>
         <Image
-          source={image ? {uri: image.medium} : noImgPortraitText}
+          source={
+            image
+              ? {uri: image.medium.replace('http', 'https')}
+              : noImgPortraitText
+          }
           style={styles.image}
         />
         <Text style={styles.average}>

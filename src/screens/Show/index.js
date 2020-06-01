@@ -60,7 +60,11 @@ const Show = () => {
       <View style={styles.container}>
         <View style={styles.imageContainer}>
           <Image
-            source={image ? {uri: image.medium} : noImgPortraitText}
+            source={
+              image
+                ? {uri: image.medium.replace('http', 'https')}
+                : noImgPortraitText
+            }
             style={styles.image}
           />
         </View>
