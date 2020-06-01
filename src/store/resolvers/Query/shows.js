@@ -12,6 +12,7 @@ const SEARCH = gql`
         rating @type(name: "Rating") {
           average
         }
+        summary
       }
     }
   }
@@ -28,6 +29,7 @@ const SHOWS = gql`
       rating @type(name: "Rating") {
         average
       }
+      summary
     }
   }
 `;

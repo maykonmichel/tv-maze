@@ -11,6 +11,7 @@ export default gql`
       rating @type(name: "Rating") {
         average
       }
+      summary
     }
     episodes(show: $id)
       @rest(type: "Episode", path: "/shows/{args.show}/episodes") {
