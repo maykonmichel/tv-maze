@@ -1,9 +1,10 @@
-import React, {memo, useCallback} from 'react';
-import {FlatList, Image, Text, View} from 'react-native';
+import React, {memo, useCallback, useEffect, useMemo} from 'react';
+import {Image, SectionList, Text, View} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import TouchableView from '../../components/TouchableView';
+import noImgPortraitText from '../../assets/images/no-img-portrait-text.png';
+import Episode from '../../components/Episode';
 import SHOW from '../../store/gql/query/SHOW';
 
 import styles from './styles';
@@ -11,37 +12,65 @@ import styles from './styles';
 const keyExtractor = ({id}) => id.toString();
 
 const Show = () => {
-  const {navigate} = useNavigation();
+  const {setOptions} = useNavigation();
   const {
     params: {id},
   } = useRoute();
 
   const {
-    data: {episodes = [], show: {name, image: {medium: uri} = {}} = {}} = {},
+    data: {episodes = [], seasons = [], show: {name, image, summary} = {}} = {},
   } = useQuery(SHOW, {
     variables: {id},
   });
 
-  const renderItem = useCallback(
-    ({item}) => (
-      <TouchableView onPress={() => navigate('episode', {id: item.id})}>
-        <Text>{`${item.number} - ${item.name}`}</Text>
-      </TouchableView>
-    ),
-    [navigate],
+  const sections = useMemo(
+    () =>
+      seasons.map(({number}) => ({
+        number,
+        data: episodes.filter(({season}) => season === number),
+      })),
+    [episodes, seasons],
   );
 
+  const renderItem = useCallback(
+    ({item}) => <Episode show={name} {...item} />,
+    [name],
+  );
+
+  const renderSectionHeader = useCallback(
+    ({section: {number}}) => (
+      <Text style={styles.header}>{`SEASON ${number}`}</Text>
+    ),
+    [],
+  );
+
+  useEffect(() => {
+    setOptions({
+      headerTitle: name,
+    });
+  }, [name, setOptions]);
+
   return (
-    <View>
-      <Image source={{uri}} style={styles.image} />
-      <Text>{name}</Text>
-      <FlatList
+    <>
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={image ? {uri: image.medium} : noImgPortraitText}
+            style={styles.image}
+          />
+        </View>
+        <Text style={styles.summary}>{summary}</Text>
+      </View>
+      <SectionList
+        sections={sections}
         data={episodes}
         extraData={episodes}
         renderItem={renderItem}
+        renderSectionHeader={renderSectionHeader}
         keyExtractor={keyExtractor}
+        stickySectionHeadersEnabled
       />
-    </View>
+    </>
   );
 };
 

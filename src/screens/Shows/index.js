@@ -1,5 +1,5 @@
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
-import {Button, FlatList, TextInput, View} from 'react-native';
+import {Button, FlatList, TextInput} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
 
@@ -45,21 +45,21 @@ const Shows = () => {
 
   useEffect(() => {
     setOptions({
-      headerTitle: () => <TextInput onChangeText={setQ} />,
+      headerTitle: () => (
+        <TextInput onChangeText={setQ} placeholder="Search shows" />
+      ),
     });
   }, [setOptions]);
 
   return (
-    <View>
-      <FlatList
-        data={shows}
-        extraData={shows}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        numColumns={2}
-        ListFooterComponent={ListFooterComponent}
-      />
-    </View>
+    <FlatList
+      data={shows}
+      extraData={shows}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+      numColumns={2}
+      ListFooterComponent={ListFooterComponent}
+    />
   );
 };
 

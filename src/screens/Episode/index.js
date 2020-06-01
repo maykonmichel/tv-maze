@@ -6,10 +6,11 @@ import {useRoute} from '@react-navigation/native';
 import EPISODE from '../../store/gql/query/EPISODE';
 
 import styles from './styles';
+import noImgLandscapeText from '../../assets/images/no-img-landscape-text.png';
 
 const Episode = () => {
   const {
-    params: {id},
+    params: {id, show},
   } = useRoute();
 
   const {
@@ -19,12 +20,18 @@ const Episode = () => {
   });
 
   return (
-    <View>
-      <Image source={{uri: image?.medium}} style={styles.image} />
-      <Text>{name}</Text>
-      <Text>{number}</Text>
-      <Text>{season}</Text>
-      <Text>{summary}</Text>
+    <View style={styles.container}>
+      <View>
+        <Image
+          source={image ? {uri: image.medium} : noImgLandscapeText}
+          style={styles.image}
+        />
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.summary}>{summary}</Text>
+      </View>
+      <Text style={styles.data}>
+        {`${show}: Season ${season} - Episode ${number}`}
+      </Text>
     </View>
   );
 };
