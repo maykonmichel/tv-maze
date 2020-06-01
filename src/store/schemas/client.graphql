@@ -8,3 +8,7 @@ extend type Show {
 extend type Mutation {
   toggleFavorite(id: ID!): Show
 }
+
+extend type Query {
+  favorites: [String]
+}
