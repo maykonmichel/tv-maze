@@ -54,5 +54,7 @@ export default async (parent, args, {client}) => {
     favorite: false,
   });
 
-  return shows.map(addFavoriteField) || search.map(({show}) => show);
+  return shows
+    ? shows.map(addFavoriteField)
+    : search.map(({show}) => addFavoriteField(show));
 };

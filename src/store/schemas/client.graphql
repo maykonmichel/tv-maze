@@ -4,3 +4,7 @@ directive @type(name: String!) on FIELD
 extend type Show {
   favorite: Boolean
 }
+
+extend type Mutation {
+  toggleFavorite(id: ID!): Show
+}
