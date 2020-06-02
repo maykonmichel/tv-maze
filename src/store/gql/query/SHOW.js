@@ -17,6 +17,7 @@ export default gql`
         time
         days
       }
+      favorite
     }
     seasons(show: $id)
       @rest(type: "Season", path: "/shows/{args.show}/seasons") {
