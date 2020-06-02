@@ -45,6 +45,10 @@ npx react-native run-android
     - Image, if there is one
 - Icon
 - Splash screen
+- Allow the user to save a series as a favorite
+- Allow the user to delete a series from the favorites list
+- Allow the user to browse their favorite series in custom order, and click on one to see its details
+- Allow the user to search their favorite series
 
 ## License
 
