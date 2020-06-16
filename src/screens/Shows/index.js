@@ -6,7 +6,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {ActivityIndicator, FlatList, TextInput, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  TextInput,
+  View,
+} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
@@ -93,8 +99,8 @@ const Shows = () => {
 
   useEffect(() => {
     setOptions({
-      headerTitle: () => (
-        <View style={styles.headerContainer}>
+      header: () => (
+        <SafeAreaView style={styles.headerContainer}>
           <TextInput
             onChangeText={setQ}
             placeholder="Search shows"
@@ -109,7 +115,7 @@ const Shows = () => {
               />
             </TouchableView>
           </View>
-        </View>
+        </SafeAreaView>
       ),
     });
   }, [favorite, onToggleFavorite, setOptions]);
